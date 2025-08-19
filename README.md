@@ -57,5 +57,10 @@ Este projeto é colaborativo! Se você é desenvolvedor, designer ou profissiona
 
 ---
 
-**Desenvolvido por:** @harthur123 | @640Joao | @melissayuli | @gustadeb | @felipe1dev 
+**Desenvolvido por:** Contribuidores:
+- [João](https://github.com/640Joao)
+- [Melissa](https://github.com/melissayuli)
+- [Gustavo](https://github.com/gustadeb)
+- [Felipe](https://github.com/felipe1dev)
+
 **ODS 3 — Boa saúde e bem-estar**
