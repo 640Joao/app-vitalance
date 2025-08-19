@@ -19,4 +19,43 @@ Vitalance busca incentivar hábitos saudáveis, combater o sedentarismo e facili
   - Cálculo de distância, tempo, ritmo e calorias gastas
 
 - 🏋️ **Controle de Exercícios**
-  - Registro de tre
+  - Registro de treinos, séries e repetições
+  - Evolução muscular e metas de desempenho
+
+- 📊 **Painel de Saúde**
+  - Indicadores como IMC, hidratação, sono e progresso semanal
+
+- 🔔 **Alertas e Recomendações**
+  - Notificações personalizadas para manter a rotina saudável
+
+- 🤝 **Integração com Profissionais**
+  - Conexão com nutricionistas e personal trainers para acompanhamento remoto
+
+## 🎯 Alinhamento com a ODS 3
+
+Vitalance contribui diretamente com a ODS 3 ao:
+
+- Promover hábitos saudáveis e prevenir doenças crônicas
+- Incentivar a prática regular de atividades físicas
+- Democratizar o acesso à informação sobre saúde e bem-estar
+- Estimular a autonomia dos usuários na gestão da própria saúde
+
+## 🛠️ Tecnologias Utilizadas
+
+- **Frontend**: Flutter
+- **Backend**: Firebase / Node.js
+- **Banco de Dados**: Firestore
+- **APIs**: Google Fit, OpenFoodFacts
+
+## 🚧 Status do Projeto
+
+Em desenvolvimento — funcionalidades básicas em fase de prototipagem.
+
+## 🤝 Contribuições
+
+Este projeto é colaborativo! Se você é desenvolvedor, designer ou profissional da saúde e quer contribuir, abra uma issue ou envie um pull request.
+
+---
+
+**Desenvolvido por:** João e equipe  
+**ODS 3 — Boa saúde e bem-estar**
