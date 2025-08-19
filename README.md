@@ -57,5 +57,5 @@ Este projeto é colaborativo! Se você é desenvolvedor, designer ou profissiona
 
 ---
 
-**Desenvolvido por:** João Elias Negreiros de Souza Matos, Harthur Henrique Costa Nunes, Gustavo dos Santos Sousa, Felipe Rogério Pereira Soares, Joel Wollace Bezerra Santos, Melissa Yuli Silva Araújo. 
+**Desenvolvido por:** @harthur123, @640Joao, @melissayuli, @gustadeb, @felipe1dev. 
 **ODS 3 — Boa saúde e bem-estar**
