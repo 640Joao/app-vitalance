@@ -63,5 +63,6 @@ Este projeto é colaborativo! Se você é desenvolvedor, designer ou profissiona
 - [Gustavo](https://github.com/gustadeb)
 - [Felipe](https://github.com/felipe1dev)
 - [Harthur](https://github.com/harthur123)
+- [Joel](https://github.com/joelwolly)
 
 **ODS 3 — Boa saúde e bem-estar**
