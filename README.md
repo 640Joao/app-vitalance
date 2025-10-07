@@ -9,27 +9,17 @@ Vitalance busca incentivar hábitos saudáveis, combater o sedentarismo e facili
 
 ## 🧠 Funcionalidades
 
-- 🥗 **Análise Nutricional**
-  - Registro de refeições
-  - Cálculo de calorias e macronutrientes
-  - Sugestões de dieta com base em metas pessoais
-
 - 🏃 **Monitoramento de Corrida e Caminhada**
   - Rastreamento por GPS
-  - Cálculo de distância, tempo, ritmo e calorias gastas
+  - Cálculo de distância, tempo, ritmo
 
 - 🏋️ **Controle de Exercícios**
   - Registro de treinos, séries e repetições
   - Evolução muscular e metas de desempenho
 
-- 📊 **Painel de Saúde**
-  - Indicadores como IMC, hidratação, sono e progresso semanal
 
 - 🔔 **Alertas e Recomendações**
   - Notificações personalizadas para manter a rotina saudável
-
-- 🤝 **Integração com Profissionais**
-  - Conexão com nutricionistas e personal trainers para acompanhamento remoto
 
 ## 🎯 Alinhamento com a ODS 3
 
@@ -42,9 +32,9 @@ Vitalance contribui diretamente com a ODS 3 ao:
 
 ## 🛠️ Tecnologias Utilizadas
 
-- **Frontend**: Flutter
-- **Backend**: Firebase / Node.js
-- **Banco de Dados**: Firestore
+- **Frontend**: Angular e Angular Material 
+- **Backend**: Kotlin
+- **Banco de Dados**:  Room Persistence Library
 - **APIs**: Google Fit, OpenFoodFacts
 
 ## 🚧 Status do Projeto
