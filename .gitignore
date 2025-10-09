@@ -1,0 +1,4 @@
+# Pasta de exclusão
+node_modules/
+.venv/
+
