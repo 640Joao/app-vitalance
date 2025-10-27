@@ -56,8 +56,8 @@ class AuthService(
         val user = userRepository.findByEmail(email).orElse(null)
 
         if (user != null) {
-            // CORREÇÃO CRÍTICA: Exclusão de todos os tokens antigos para evitar conflito no MySQL
-            tokenRepository.deleteAllByUser(user)
+            // CORREÇÃO CRÍTICA: Exclusão de todos os tokens antigos para evitar acúmulo e conflito.
+            tokenRepository.deleteAllByUser(user) // <--- ESTÁ CORRETO!
 
             // 1. Gera token único e expiração
             val tokenString = UUID.randomUUID().toString()
@@ -107,7 +107,7 @@ class AuthService(
         user.password = newHashedPassword
 
         userRepository.save(user)
-        tokenRepository.delete(resetToken) // Deleta o token após o uso
+        tokenRepository.delete(resetToken) // Deleta o token após o uso <--- ESTÁ CORRETO!
 
         return "Senha redefinida com sucesso."
     }
