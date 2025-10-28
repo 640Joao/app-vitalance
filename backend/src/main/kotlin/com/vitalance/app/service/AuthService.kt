@@ -56,8 +56,8 @@ class AuthService(
         val user = userRepository.findByEmail(email).orElse(null)
 
         if (user != null) {
-            // CORREÇÃO CRÍTICA: Exclusão de todos os tokens antigos para evitar acúmulo e conflito.
-            tokenRepository.deleteAllByUser(user) // <--- ESTÁ CORRETO!
+            // CORREÇÃO CRÍTICA: Exclusão de todos os tokens antigos para evitar conflito no MySQL
+            tokenRepository.deleteAllByUser(user)
 
             // 1. Gera token único e expiração
             val tokenString = UUID.randomUUID().toString()
@@ -85,7 +85,7 @@ class AuthService(
     // --- RESET DE SENHA - ETAPA 2: ATUALIZAÇÃO DA SENHA ---
     @Transactional
     fun resetPassword(token: String, request: ResetPasswordConfirmationRequest): String {
-        // Validação de Confirmação de Senha
+        // Validação 1: Confirmação de Senha
         if (request.password != request.confirmPassword) {
             throw ResponseStatusException(HttpStatus.BAD_REQUEST, "A senha e a confirmação de senha não coincidem.")
         }
@@ -101,13 +101,23 @@ class AuthService(
             throw ResponseStatusException(HttpStatus.BAD_REQUEST, "Token de redefinição expirado.")
         }
 
-        // 3. Atualiza a senha e salva
+        // 3. Prepara a atualização
         val user = resetToken.user
+
+        // --- NOVO PASSO DE SEGURANÇA: NÃO PERMITIR SENHA ANTIGA ---
+        if (passwordEncoder.matches(request.password, user.password)) {
+            throw ResponseStatusException(
+                HttpStatus.BAD_REQUEST,
+                "A nova senha não pode ser igual à senha anterior."
+            )
+        }
+
+        // 4. Atualiza a senha e salva
         val newHashedPassword = passwordEncoder.encode(request.password)
         user.password = newHashedPassword
 
         userRepository.save(user)
-        tokenRepository.delete(resetToken) // Deleta o token após o uso <--- ESTÁ CORRETO!
+        tokenRepository.delete(resetToken) // Deleta o token após o uso
 
         return "Senha redefinida com sucesso."
     }

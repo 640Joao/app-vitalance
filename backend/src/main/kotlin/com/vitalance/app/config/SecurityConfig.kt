@@ -25,15 +25,16 @@ class SecurityConfig {
             // Define as regras de autorização de requisições
             .authorizeHttpRequests { auth ->
                 auth
-                    // Permite acesso público total aos endpoints de autenticação e H2 Console
-                    .requestMatchers("/api/auth/**", "/h2-console/**").permitAll()
+                    // Permite acesso público total aos endpoints de autenticação
+                    .requestMatchers("/api/auth/**").permitAll()
 
                     // Exige autenticação para qualquer outra requisição
                     .anyRequest().authenticated()
             }
 
-            // Configurações para acesso ao H2 Console
-            .headers { headers -> headers.frameOptions { it.sameOrigin() } }
+        // REMOVIDO: Configurações para acesso ao H2 Console
+        // Se você precisar que o Spring Security não interfira em rotas internas do servidor, adicione esta linha:
+        // .headers { headers -> headers.frameOptions { it.sameOrigin() } }
 
         return http.build()
     }
