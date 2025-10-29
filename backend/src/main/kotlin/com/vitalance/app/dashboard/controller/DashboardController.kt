@@ -1,7 +1,7 @@
-package com.vitalance.app.controller
+package com.vitalance.app.dashboard.controller
 
 import com.vitalance.app.dto.DashboardDTO
-import com.vitalance.app.service.DashboardService
+import com.vitalance.app.dashboard.service.DashboardService
 import com.vitalance.app.model.User // Importação necessária
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity

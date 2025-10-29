@@ -1,4 +1,4 @@
-package com.vitalance.app.service
+package com.vitalance.app.dashboard.service
 
 import com.vitalance.app.dto.DashboardDTO
 import com.vitalance.app.dto.LastActivityDTO

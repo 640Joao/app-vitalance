@@ -1,7 +1,7 @@
-package com.vitalance.app.controller
+package com.vitalance.app.auth.controller
 
 import com.vitalance.app.dto.*
-import com.vitalance.app.service.AuthService
+import com.vitalance.app.auth.service.AuthService
 import com.vitalance.app.util.JwtUtil
 import jakarta.validation.Valid
 import org.springframework.http.HttpStatus

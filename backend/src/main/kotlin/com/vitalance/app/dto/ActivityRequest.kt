@@ -1,24 +1,24 @@
 package com.vitalance.app.dto
 
-import jakarta.validation.constraints.NotNull
+import jakarta.validation.constraints.Min
+import jakarta.validation.constraints.NotBlank // Novo para string
+import jakarta.validation.constraints.NotNull // Usamos para a própria classe
 import java.time.LocalDateTime
 
 data class ActivityRequest(
-    // REMOVIDO: O userId é obtido do token JWT, não do JSON.
-    // @field:NotNull(message = "O ID do usuário não pode ser nulo.")
-    // val userId: Long,
+    // userId FOI REMOVIDO (vem do JWT)
 
-    @field:NotNull(message = "O tipo de atividade é obrigatório.")
+    @field:NotBlank(message = "O tipo de atividade é obrigatório.")
     val type: String, // Ex: "RUNNING", "WALKING"
 
-    @field:NotNull(message = "A distância é obrigatória.")
+    @field:Min(value = 1, message = "A distância deve ser maior que zero.") // NOVIDADE: Validação de mínimo
     val distanceKm: Double,
 
-    @field:NotNull(message = "A duração é obrigatória.")
+    @field:Min(value = 1, message = "A duração deve ser maior que zero.") // NOVIDADE: Validação de mínimo
     val durationMinutes: Int,
 
+    // Este campo pode ser nulo ou zero, então não precisa de @Min.
     val caloriesBurned: Int? = null,
 
-    // Opcional: Se a data não for fornecida, o serviço usará LocalDateTime.now()
     val date: LocalDateTime? = null
 )

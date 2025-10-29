@@ -1,4 +1,4 @@
-package com.vitalance.app.component // Recomendo um pacote 'component'
+package com.vitalance.app.auth.component // Recomendo um pacote 'component'
 
 import com.vitalance.app.repository.PasswordResetTokenRepository
 import org.springframework.scheduling.annotation.Scheduled

@@ -1,6 +1,6 @@
 package com.vitalance.app.config
 
-import com.vitalance.app.security.JwtFilter
+import com.vitalance.app.auth.security.JwtFilter
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.security.authentication.AuthenticationManager

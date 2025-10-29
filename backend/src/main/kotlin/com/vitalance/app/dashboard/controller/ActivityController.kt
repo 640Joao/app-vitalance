@@ -1,4 +1,4 @@
-package com.vitalance.app.controller
+package com.vitalance.app.dashboard.controller
 
 import com.vitalance.app.dto.ActivityRequest
 import com.vitalance.app.dto.MessageResponse
