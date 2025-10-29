@@ -1,4 +1,4 @@
-package com.vitalance.backend.model
+package com.vitalance.app.model
 
 import jakarta.persistence.*
 

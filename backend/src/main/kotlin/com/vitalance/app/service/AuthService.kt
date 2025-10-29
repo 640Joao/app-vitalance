@@ -1,10 +1,10 @@
-package com.vitalance.backend.service
+package com.vitalance.app.service
 
-import com.vitalance.backend.dto.ResetPasswordConfirmationRequest
-import com.vitalance.backend.model.PasswordResetToken
-import com.vitalance.backend.model.User
-import com.vitalance.backend.repository.PasswordResetTokenRepository
-import com.vitalance.backend.repository.UserRepository
+import com.vitalance.app.dto.ResetPasswordConfirmationRequest
+import com.vitalance.app.model.PasswordResetToken
+import com.vitalance.app.model.User
+import com.vitalance.app.repository.PasswordResetTokenRepository
+import com.vitalance.app.repository.UserRepository
 import jakarta.transaction.Transactional
 import org.springframework.http.HttpStatus
 import org.springframework.security.crypto.password.PasswordEncoder
@@ -37,7 +37,7 @@ class AuthService(
         return userRepository.save(newUser)
     }
 
-    // --- LOGIN ---
+    //-- LOGIN ---
     fun login(email: String, plainPassword: String): User {
         val user = userRepository.findByEmail(email).orElseThrow {
             throw ResponseStatusException(HttpStatus.UNAUTHORIZED, "E-mail ou senha inválidos.")
@@ -47,7 +47,7 @@ class AuthService(
             throw ResponseStatusException(HttpStatus.UNAUTHORIZED, "E-mail ou senha inválidos.")
         }
 
-        return user
+        return user // Agora retorna o objeto User
     }
 
     // --- RESET DE SENHA - ETAPA 1: SOLICITAÇÃO DE TOKEN ---

@@ -1,4 +1,4 @@
-package com.vitalance.backend.dto
+package com.vitalance.app.dto
 
 import jakarta.validation.constraints.Email
 import jakarta.validation.constraints.Pattern
@@ -32,5 +32,12 @@ data class ResetPasswordConfirmationRequest(
 
 // DTO de resposta (genérico)
 data class MessageResponse(
+    val message: String
+)
+
+// DTO de resposta para login (com token JWT)
+data class LoginResponse(
+    val token: String,
+    val userId: Long,
     val message: String
 )

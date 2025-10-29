@@ -43,6 +43,11 @@ dependencies {
 
 	// Configurações de teste, etc.
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
+
+	//dependências para gerar e processar o JWT
+	implementation("io.jsonwebtoken:jjwt-api:0.12.5")
+	runtimeOnly("io.jsonwebtoken:jjwt-impl:0.12.5")
+	runtimeOnly("io.jsonwebtoken:jjwt-jackson:0.12.5")
 }
 
 kotlin {

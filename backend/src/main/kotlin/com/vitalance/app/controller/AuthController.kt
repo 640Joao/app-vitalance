@@ -1,14 +1,19 @@
-package com.vitalance.backend.controller
+package com.vitalance.app.controller
 
-import com.vitalance.backend.dto.*
-import com.vitalance.backend.service.AuthService
+import com.vitalance.app.dto.*
+import com.vitalance.app.service.AuthService
+import com.vitalance.app.util.JwtUtil
 import jakarta.validation.Valid
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.*
+import org.springframework.web.server.ResponseStatusException
 
 @RestController
 @RequestMapping("/api/auth")
-class AuthController(private val authService: AuthService) {
+class AuthController(
+    private val authService: AuthService,
+    private val jwtUtil: JwtUtil
+) {
 
     // Rota de Cadastro: POST /api/auth/register
     @PostMapping("/register")
@@ -18,16 +23,7 @@ class AuthController(private val authService: AuthService) {
         return MessageResponse("Cadastro realizado com sucesso!")
     }
 
-    // Rota de Login: POST /api/auth/login
-    @PostMapping("/login")
-    @ResponseStatus(HttpStatus.OK)
-    fun login(@Valid @RequestBody request: AuthRequest): MessageResponse {
-        authService.login(request.email, request.password)
-        // FUTURO: Aqui deve ser implementada a lógica para gerar o JWT
-        return MessageResponse("Login realizado com sucesso! (TODO: Gerar JWT)")
-    }
-
-    // Rota de Solicitação de Reset: POST /api/auth/reset-request (AGORA RECEBE JSON)
+    // Rota de Solicitação de Reset: POST /api/auth/reset-request (RECEBE JSON)
     @PostMapping("/reset-request")
     @ResponseStatus(HttpStatus.OK)
     fun requestPasswordReset(@Valid @RequestBody request: EmailRequest): MessageResponse {
@@ -35,7 +31,7 @@ class AuthController(private val authService: AuthService) {
         return MessageResponse(message)
     }
 
-    // Rota de Reset de Senha: POST /api/auth/reset-password/{token} (TOKEN NA URL, SENHAS NO JSON)
+    // Rota de Reset de Senha: POST /api/auth/reset-password/{token}
     @PostMapping("/reset-password/{token}")
     @ResponseStatus(HttpStatus.OK)
     fun resetPassword(
@@ -44,5 +40,24 @@ class AuthController(private val authService: AuthService) {
     ): MessageResponse {
         val message = authService.resetPassword(token, request)
         return MessageResponse(message)
+    }
+
+    // Rota de Login: POST /api/auth/login
+    @PostMapping("/login")
+    @ResponseStatus(HttpStatus.OK)
+    fun login(@Valid @RequestBody request: AuthRequest): LoginResponse {
+        val user = authService.login(request.email, request.password)
+
+        // CORREÇÃO: Converte o ID para Long de forma segura, pois ele não pode ser nulo após o login.
+        val userId = user.id ?: throw ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "ID do usuário não encontrado após o login.")
+
+        // Geração do JWT
+        val token = jwtUtil.generateToken(userId)
+
+        return LoginResponse(
+            token = token,
+            userId = userId, // Usa o userId (Long não-nulo) validado
+            message = "Login realizado com sucesso. Token gerado."
+        )
     }
 }
