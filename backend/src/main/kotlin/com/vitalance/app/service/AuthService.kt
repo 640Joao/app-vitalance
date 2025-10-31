@@ -1,12 +1,17 @@
-package com.vitalance.backend.service
+package com.vitalance.app.service
 
-import com.vitalance.backend.dto.ResetPasswordConfirmationRequest
-import com.vitalance.backend.model.PasswordResetToken
-import com.vitalance.backend.model.User
-import com.vitalance.backend.repository.PasswordResetTokenRepository
-import com.vitalance.backend.repository.UserRepository
+import com.vitalance.app.component.JwtTokenProvider
+import com.vitalance.app.dto.AuthResponseDTO
+import com.vitalance.app.dto.LoginRequestDTO
+import com.vitalance.app.dto.ResetPasswordConfirmationRequest
+import com.vitalance.app.model.PasswordResetToken
+import com.vitalance.app.model.User
+import com.vitalance.app.repository.PasswordResetTokenRepository
+import com.vitalance.app.repository.UserRepository
 import jakarta.transaction.Transactional
 import org.springframework.http.HttpStatus
+import org.springframework.security.core.userdetails.UserDetails
+import org.springframework.security.core.userdetails.UserDetailsService
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
 import org.springframework.web.server.ResponseStatusException
@@ -18,8 +23,9 @@ class AuthService(
     private val userRepository: UserRepository,
     private val tokenRepository: PasswordResetTokenRepository,
     private val passwordEncoder: PasswordEncoder,
-    private val emailService: EmailService
-) {
+    private val emailService: EmailService,
+    private val tokenProvider: JwtTokenProvider
+) : UserDetailsService {
 
     // --- CADASTRO ---
     @Transactional
@@ -48,6 +54,19 @@ class AuthService(
         }
 
         return user
+    }
+
+    // --- NOVA FUNÇÃO (QUE GERA O TOKEN) ---
+    fun authenticateAndGenerateToken(loginRequest: LoginRequestDTO): AuthResponseDTO {
+
+        // 1. Valida o usuário usando a função do seu amigo
+        val user = login(loginRequest.email, loginRequest.password)
+
+        // 2. Gera o token
+        val token = tokenProvider.generateToken(user.email)
+
+        // 3. Retorna o DTO de Resposta (que já existe no seu AuthDTO.kt!)
+        return AuthResponseDTO(token = token)
     }
 
     // --- RESET DE SENHA - ETAPA 1: SOLICITAÇÃO DE TOKEN ---
@@ -110,5 +129,23 @@ class AuthService(
         tokenRepository.delete(resetToken) // Deleta o token após o uso <--- ESTÁ CORRETO!
 
         return "Senha redefinida com sucesso."
+    }
+
+    @Transactional
+    @Throws(ResponseStatusException::class)
+    override fun loadUserByUsername(email: String): UserDetails {
+        val user = userRepository.findByEmail(email)
+            .orElseThrow { ResponseStatusException(HttpStatus.UNAUTHORIZED, "Usuário não encontrado") }
+
+        // 2. Converte nosso User em um UserDetails do Spring
+        return org.springframework.security.core.userdetails.User
+            .withUsername(user.email)
+            .password(user.password) // O password hash do banco
+            .authorities(emptyList()) // Você pode adicionar 'roles' (ex: "ROLE_USER") aqui no futuro
+            .accountExpired(false)
+            .accountLocked(false)
+            .credentialsExpired(false)
+            .disabled(false)
+            .build()
     }
 }

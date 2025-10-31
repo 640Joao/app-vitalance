@@ -1,4 +1,4 @@
-package com.vitalance.backend.dto
+package com.vitalance.app.dto
 
 import jakarta.validation.constraints.Email
 import jakarta.validation.constraints.Pattern
@@ -15,6 +15,14 @@ data class AuthRequest(
     val password: String
 )
 
+/**
+ * DTO de resposta para um login bem-sucedido.
+ */
+data class AuthResponseDTO(
+    val token: String,
+    val tokenType: String = "Bearer" // Padrão de mercado
+)
+
 // NOVO DTO: Requisição inicial de reset (apenas e-mail no corpo JSON)
 data class EmailRequest(
     @field:Email(message = "O e-mail deve ser válido.")
@@ -28,6 +36,11 @@ data class ResetPasswordConfirmationRequest(
 
     @field:Pattern(regexp = PASSWORD_REGEX, message = "A senha de confirmação deve ter no mínimo 6 caracteres e incluir 1 letra maiúscula, 1 minúscula, 1 número e 1 símbolo (@$!%*?&).")
     val confirmPassword: String
+)
+
+data class LoginRequestDTO(
+    val email: String,
+    val password: String
 )
 
 // DTO de resposta (genérico)

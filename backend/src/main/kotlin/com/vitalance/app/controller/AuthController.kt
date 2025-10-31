@@ -1,9 +1,10 @@
-package com.vitalance.backend.controller
+package com.vitalance.app.controller
 
-import com.vitalance.backend.dto.*
-import com.vitalance.backend.service.AuthService
+import com.vitalance.app.dto.*
+import com.vitalance.app.service.AuthService
 import jakarta.validation.Valid
 import org.springframework.http.HttpStatus
+import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 
 @RestController
@@ -20,11 +21,11 @@ class AuthController(private val authService: AuthService) {
 
     // Rota de Login: POST /api/auth/login
     @PostMapping("/login")
-    @ResponseStatus(HttpStatus.OK)
-    fun login(@Valid @RequestBody request: AuthRequest): MessageResponse {
-        authService.login(request.email, request.password)
-        // FUTURO: Aqui deve ser implementada a lógica para gerar o JWT
-        return MessageResponse("Login realizado com sucesso! (TODO: Gerar JWT)")
+    fun authenticateUser(@RequestBody loginRequest: LoginRequestDTO): ResponseEntity<AuthResponseDTO> {
+        // Chama a NOVA função que retorna o DTO com o token
+        val authResponse = authService.authenticateAndGenerateToken(loginRequest)
+        // Retorna 200 OK com o token no corpo
+        return ResponseEntity.ok(authResponse)
     }
 
     // Rota de Solicitação de Reset: POST /api/auth/reset-request (AGORA RECEBE JSON)

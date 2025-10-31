@@ -1,4 +1,4 @@
-package com.vitalance.backend.model
+package com.vitalance.app.model
 
 import jakarta.persistence.*
 
@@ -12,9 +12,19 @@ data class User(
 
     // O e-mail deve ser único em todo o banco de dados
     @Column(unique = true, nullable = false)
-    val email: String,
+    var email: String,
 
     // A senha é armazenada como um hash (BCrypt)
     @Column(nullable = false)
-    var password: String // 'var' permite que a senha seja atualizada no reset
+    var password: String,
+
+    // Campos de Configuração
+    @Column(nullable = false)
+    var theme: String = "light", // Valor padrão 'light'
+
+    @Column(nullable = false)
+    var notificationsEnabled: Boolean = true, // Valor padrão 'true'
+
+    @Column(nullable = true) // 'true' = pode ser nulo
+    var goal: String? = null // Meta do usuário (ex: "Correr 5km")
 )

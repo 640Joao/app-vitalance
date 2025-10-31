@@ -1,4 +1,4 @@
-package com.vitalance.backend
+package com.vitalance.app
 
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication

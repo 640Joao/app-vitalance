@@ -1,7 +1,7 @@
-package com.vitalance.backend.repository
+package com.vitalance.app.repository
 
-import com.vitalance.backend.model.PasswordResetToken
-import com.vitalance.backend.model.User
+import com.vitalance.app.model.PasswordResetToken
+import com.vitalance.app.model.User
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.data.jpa.repository.Modifying
 import org.springframework.data.jpa.repository.Query

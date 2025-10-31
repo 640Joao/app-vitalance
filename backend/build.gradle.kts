@@ -37,6 +37,11 @@ dependencies {
 	// --- DEPENDÊNCIA DO E-MAIL ---
 	implementation("org.springframework.boot:spring-boot-starter-mail")
 
+	// Dependências para JSON Web Token (JWT)
+    implementation("io.jsonwebtoken:jjwt-api:0.11.5")
+    runtimeOnly("io.jsonwebtoken:jjwt-impl:0.11.5")
+    runtimeOnly("io.jsonwebtoken:jjwt-jackson:0.11.5")
+
 	// --- Outras dependências padrão do Kotlin/Spring ---
 	implementation("org.jetbrains.kotlin:kotlin-reflect")
 	runtimeOnly("org.jetbrains.kotlin:kotlin-stdlib")

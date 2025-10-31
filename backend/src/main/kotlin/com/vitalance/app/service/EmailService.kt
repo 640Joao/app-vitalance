@@ -1,4 +1,4 @@
-package com.vitalance.backend.service
+package com.vitalance.app.service
 
 import org.springframework.mail.SimpleMailMessage
 import org.springframework.mail.javamail.JavaMailSender
