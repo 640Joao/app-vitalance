@@ -23,9 +23,6 @@ data class Activity(
     @Column(nullable = false)
     val durationMinutes: Int,
 
-    // Calorias estimadas
-    val caloriesBurned: Int? = null,
-
     @Column(nullable = false)
     val date: LocalDateTime = LocalDateTime.now()
 )

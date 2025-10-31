@@ -30,12 +30,30 @@ data class ResetPasswordConfirmationRequest(
     val confirmPassword: String
 )
 
+// DTO para receber a atualização do perfil (o que o app envia)
+data class ProfileUpdateDTO(
+    val username: String?,
+    val bio: String?,
+    val profilePictureUrl: String?
+)
+
+// DTO para enviar os dados do perfil (o que o backend responde)
+data class ProfileResponseDTO(
+    val userId: Long,
+    val email: String,
+    val username: String?,
+    val bio: String?,
+    val profilePictureUrl: String?
+)
+
+// --- ADICIONADO (Faltava) ---
 // DTO de resposta (genérico)
 data class MessageResponse(
     val message: String
 )
 
-// DTO de resposta para login (com token JWT)
+// --- ADICIONADO (Faltava) ---
+// DTO de resposta do Login (com Token)
 data class LoginResponse(
     val token: String,
     val userId: Long,

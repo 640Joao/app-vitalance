@@ -1,6 +1,6 @@
-package com.vitalance.app.dashboard.controller
+package com.vitalance.app.training.controller
 
-import com.vitalance.app.dto.ActivityRequest
+import com.vitalance.app.dto.ActivityDTO
 import com.vitalance.app.dto.MessageResponse
 import com.vitalance.app.repository.ActivityRepository
 import com.vitalance.app.repository.UserRepository
@@ -25,7 +25,7 @@ class ActivityController(
 ) {
 
     @PostMapping
-    fun recordActivity(@Valid @RequestBody request: ActivityRequest): ResponseEntity<MessageResponse> {
+    fun recordActivity(@Valid @RequestBody request: ActivityDTO): ResponseEntity<MessageResponse> {
 
         // 1. OBTÉM O OBJETO USER LOGADO DO CONTEXTO DE SEGURANÇA (via JWT)
         val authentication = SecurityContextHolder.getContext().authentication
@@ -50,7 +50,6 @@ class ActivityController(
             type = request.type,
             distanceKm = request.distanceKm,
             durationMinutes = request.durationMinutes,
-            caloriesBurned = request.caloriesBurned,
             // Usa a data fornecida ou a data atual
             date = request.date ?: LocalDateTime.now()
         )

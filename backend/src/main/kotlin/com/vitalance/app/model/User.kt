@@ -2,19 +2,26 @@ package com.vitalance.app.model
 
 import jakarta.persistence.*
 
-// Define esta classe como uma Entidade JPA, mapeada para uma tabela chamada 'users'
 @Entity
 @Table(name = "users")
 data class User(
-    // ID gerado automaticamente, é a chave primária
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long? = null,
 
-    // O e-mail deve ser único em todo o banco de dados
     @Column(unique = true, nullable = false)
     val email: String,
 
-    // A senha é armazenada como um hash (BCrypt)
     @Column(nullable = false)
-    var password: String // 'var' permite que a senha seja atualizada no reset
+    var password: String,
+
+    // --- NOVOS CAMPOS DO PERFIL ---
+    // Tornamos 'var' (mutável) para que possam ser atualizados
+
+    @Column(unique = true) // Garante que o nome de usuário seja único
+    var username: String? = null,
+
+    var bio: String? = null,
+
+    @Column(name = "profile_picture_url")
+    var profilePictureUrl: String? = null
 )
