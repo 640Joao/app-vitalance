@@ -1,21 +1,25 @@
-package com.vitalance.app.security
+package com.vitalance.app.security // O pacote correto
 
-import com.vitalance.app.util.JwtUtil
+// Imports
 import com.vitalance.app.repository.UserRepository
 import jakarta.servlet.FilterChain
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
+import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource
 import org.springframework.stereotype.Component
 import org.springframework.web.filter.OncePerRequestFilter
 import kotlin.jvm.optionals.getOrNull
-import org.springframework.security.core.authority.SimpleGrantedAuthority // Importação necessária
+
+// IMPORTAÇÃO CORRIGIDA: O JwtTokenProvider deve estar no mesmo pacote 'security'
+import com.vitalance.app.security.JwtTokenProvider
 
 @Component
 class JwtFilter(
-    private val jwtUtil: JwtUtil,
+    // CORREÇÃO: Removemos o caminho completo, pois ambos estão no pacote 'auth.security'
+    private val jwtTokenProvider: JwtTokenProvider,
     private val userRepository: UserRepository
 ) : OncePerRequestFilter() {
 
@@ -26,42 +30,46 @@ class JwtFilter(
     ) {
         val header = request.getHeader("Authorization")
         val jwt: String?
-        val userId: Long?
+        val userEmail: String? // O Token Provider do seu colega usa E-mail
 
-        // 1. Extrai o JWT do header (Bearer Token)
-        if (header != null && header.startsWith("Bearer ")) {
-            jwt = header.substring(7)
-
-            // 2. Tenta extrair o ID do usuário (subject)
-            userId = try {
-                jwtUtil.extractUserId(jwt)
-            } catch (e: Exception) {
-                // Se a extração ou validação falhar (expirado, inválido), avança sem autenticar
-                filterChain.doFilter(request, response)
-                return
-            }
-        } else {
+        // 1. Extrai o JWT do header
+        if (header == null || !header.startsWith("Bearer ")) {
             filterChain.doFilter(request, response)
             return
         }
 
-        // 3. Se o token for válido e o usuário NÃO estiver autenticado
-        if (userId != null && SecurityContextHolder.getContext().authentication == null) {
+        jwt = header.substring(7)
 
-            // Busca o objeto User pelo ID (evitando buscas desnecessárias)
-            val user = userRepository.findById(userId).getOrNull()
+        // 2. Tenta extrair o E-MAIL
+        userEmail = try {
+            jwtTokenProvider.extractEmail(jwt)
+        } catch (e: Exception) {
+            filterChain.doFilter(request, response)
+            return
+        }
 
-            if (user != null && jwtUtil.validateToken(jwt)) {
+        // 3. Se o token for válido e o usuário não estiver autenticado
+        if (userEmail != null && SecurityContextHolder.getContext().authentication == null) {
 
-                // Cria o objeto de autenticação (usando o próprio objeto User como 'Principal')
-                // A lista de autoridades (roles) é vazia por enquanto
+            // 4. CORREÇÃO CRÍTICA: Buscamos a Entidade User REAL (do model)
+            val userEntity = userRepository.findByEmail(userEmail).getOrNull()
+
+            if (userEntity != null && jwtTokenProvider.validateToken(jwt)) {
+
+                // 5. COLOCAMOS O OBJETO 'User' REAL NO CONTEXTO
+                // (Seus controladores 'as? User' agora funcionarão!)
+
+                val authorities = listOf(SimpleGrantedAuthority("ROLE_USER")) // Damos a ele a permissão
+
                 val authentication = UsernamePasswordAuthenticationToken(
-                    user, null, listOf(SimpleGrantedAuthority("USER")) // Define a role básica
+                    userEntity, // <--- O OBJETO 'User' REAL (NÃO 'UserDetails')
+                    null,
+                    authorities
                 )
 
                 authentication.details = WebAuthenticationDetailsSource().buildDetails(request)
 
-                // Define o usuário no contexto de segurança do Spring
+                // Define o usuário no contexto de segurança
                 SecurityContextHolder.getContext().authentication = authentication
             }
         }

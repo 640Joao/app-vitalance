@@ -59,3 +59,15 @@ data class LoginResponse(
     val userId: Long,
     val message: String
 )
+
+// DTO para a requisição de Login (usado pelo novo AuthService)
+data class LoginRequestDTO(
+    @field:Email(message = "O e-mail deve ser válido.")
+    val email: String,
+    val password: String
+)
+
+// DTO para a resposta de Login (usado pelo novo AuthService)
+data class AuthResponseDTO(
+    val token: String
+)

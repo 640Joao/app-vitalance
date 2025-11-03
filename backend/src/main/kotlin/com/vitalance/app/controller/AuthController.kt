@@ -2,17 +2,15 @@ package com.vitalance.app.controller
 
 import com.vitalance.app.dto.*
 import com.vitalance.app.service.AuthService
-import com.vitalance.app.util.JwtUtil
 import jakarta.validation.Valid
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.*
-import org.springframework.web.server.ResponseStatusException
 
 @RestController
 @RequestMapping("/api/auth")
 class AuthController(
-    private val authService: AuthService,
-    private val jwtUtil: JwtUtil
+    private val authService: AuthService
+    // REMOVEMOS a injeção do JwtUtil
 ) {
 
     // Rota de Cadastro: POST /api/auth/register
@@ -23,7 +21,7 @@ class AuthController(
         return MessageResponse("Cadastro realizado com sucesso!")
     }
 
-    // Rota de Solicitação de Reset: POST /api/auth/reset-request (RECEBE JSON)
+    // Rota de Solicitação de Reset: POST /api/auth/reset-request
     @PostMapping("/reset-request")
     @ResponseStatus(HttpStatus.OK)
     fun requestPasswordReset(@Valid @RequestBody request: EmailRequest): MessageResponse {
@@ -42,22 +40,11 @@ class AuthController(
         return MessageResponse(message)
     }
 
-    // Rota de Login: POST /api/auth/login
+    // Rota de Login: POST /api/auth/login (ATUALIZADA)
     @PostMapping("/login")
     @ResponseStatus(HttpStatus.OK)
-    fun login(@Valid @RequestBody request: AuthRequest): LoginResponse {
-        val user = authService.login(request.email, request.password)
-
-        // CORREÇÃO: Converte o ID para Long de forma segura, pois ele não pode ser nulo após o login.
-        val userId = user.id ?: throw ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "ID do usuário não encontrado após o login.")
-
-        // Geração do JWT
-        val token = jwtUtil.generateToken(userId)
-
-        return LoginResponse(
-            token = token,
-            userId = userId, // Usa o userId (Long não-nulo) validado
-            message = "Login realizado com sucesso. Token gerado."
-        )
+    fun login(@Valid @RequestBody loginRequest: LoginRequestDTO): AuthResponseDTO {
+        // Agora o AuthService lida com a validação E geração do token
+        return authService.authenticateAndGenerateToken(loginRequest)
     }
 }
