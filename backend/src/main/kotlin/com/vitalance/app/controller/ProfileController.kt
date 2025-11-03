@@ -1,9 +1,9 @@
-package com.vitalance.app.profile.controller
+package com.vitalance.app.controller
 
 import com.vitalance.app.dto.ProfileResponseDTO
 import com.vitalance.app.dto.ProfileUpdateDTO
 import com.vitalance.app.model.User
-import com.vitalance.app.profile.service.ProfileService
+import com.vitalance.app.service.ProfileService
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.security.core.context.SecurityContextHolder

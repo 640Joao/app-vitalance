@@ -1,4 +1,4 @@
-package com.vitalance.app.auth.security
+package com.vitalance.app.security
 
 import com.vitalance.app.repository.UserRepository
 import org.springframework.security.core.userdetails.User

@@ -1,4 +1,4 @@
-package com.vitalance.app.profile.service
+package com.vitalance.app.service
 
 import com.vitalance.app.dto.ProfileResponseDTO
 import com.vitalance.app.dto.ProfileUpdateDTO

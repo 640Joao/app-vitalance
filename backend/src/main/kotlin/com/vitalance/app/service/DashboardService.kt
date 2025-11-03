@@ -1,11 +1,7 @@
-package com.vitalance.app.dashboard.service
+package com.vitalance.app.service
 
 import com.vitalance.app.dto.DashboardDTO
-import com.vitalance.app.dto.LastActivityDTO
-import com.vitalance.app.dto.AggregatedReportDTO
 import com.vitalance.app.repository.UserRepository
-import com.vitalance.app.service.StreakService
-import com.vitalance.app.training.service.TrainingService // Importação correta do serviço movido
 import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Service
 import org.springframework.web.server.ResponseStatusException

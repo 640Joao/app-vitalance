@@ -1,4 +1,4 @@
-package com.vitalance.app.training.service
+package com.vitalance.app.service
 
 import com.vitalance.app.dto.AggregatedReportDTO
 import com.vitalance.app.dto.LastActivityDTO

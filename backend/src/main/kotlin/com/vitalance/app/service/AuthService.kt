@@ -1,4 +1,4 @@
-package com.vitalance.app.auth.service
+package com.vitalance.app.service
 
 import com.vitalance.app.dto.ResetPasswordConfirmationRequest
 import com.vitalance.app.model.PasswordResetToken
