@@ -8,4 +8,6 @@ import java.util.*
 interface UserRepository : JpaRepository<User, Long> {
     // Método personalizado para buscar um usuário pelo e-mail
     fun findByEmail(email: String): Optional<User>
+
+    fun existsByEmail(email: String): Boolean
 }

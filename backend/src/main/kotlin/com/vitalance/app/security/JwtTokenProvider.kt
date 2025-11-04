@@ -3,6 +3,7 @@ package com.vitalance.app.security
 
 import io.jsonwebtoken.Claims
 import io.jsonwebtoken.Jwts
+import io.jsonwebtoken.JwtParser
 import io.jsonwebtoken.security.Keys
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Component
@@ -20,6 +21,13 @@ class JwtTokenProvider {
 
     private fun getSigningKey(): SecretKey = Keys.hmacShaKeyFor(secret.toByteArray())
 
+    // O parser (leitor) de token, construído uma vez
+    private fun getParser(): JwtParser {
+        return Jwts.parser()
+            .setSigningKey(getSigningKey())
+            .build()
+    }
+
     fun generateToken(email: String): String {
         val claims: Claims = Jwts.claims().setSubject(email).build()
         val now = Date()
@@ -33,23 +41,22 @@ class JwtTokenProvider {
             .compact()
     }
 
+
+    fun extractAllClaims(token: String): Claims {
+        return getParser().parseClaimsJws(token).body
+    }
+
     fun extractEmail(token: String): String {
         return extractAllClaims(token).subject
     }
 
-    fun extractAllClaims(token: String): Claims {
-        val parser = Jwts.parser()
-            .setSigningKey(getSigningKey())
-            .build()
-        return parser.parseClaimsJws(token).body
-    }
-
     fun validateToken(token: String): Boolean {
-        try {
-            extractAllClaims(token)
-            return !isTokenExpired(token)
+        return try {
+            // Apenas tentamos ler as 'claims'. Se não houver exceção, o token é válido.
+            getParser().parseClaimsJws(token)
+            !isTokenExpired(token)
         } catch (e: Exception) {
-            return false
+            false
         }
     }
 

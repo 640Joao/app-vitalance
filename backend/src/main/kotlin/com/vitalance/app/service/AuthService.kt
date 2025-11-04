@@ -1,6 +1,6 @@
 package com.vitalance.app.service
 
-// Imports (Combinação dos seus e dos dele)
+
 import com.vitalance.app.security.JwtTokenProvider
 import com.vitalance.app.dto.AuthResponseDTO
 import com.vitalance.app.dto.LoginRequestDTO
@@ -12,7 +12,7 @@ import com.vitalance.app.repository.UserRepository
 import com.vitalance.app.service.EmailService
 import jakarta.transaction.Transactional
 import org.springframework.http.HttpStatus
-import org.springframework.security.core.authority.SimpleGrantedAuthority // Importação necessária
+import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.security.core.userdetails.UserDetailsService
 import org.springframework.security.crypto.password.PasswordEncoder
@@ -100,7 +100,7 @@ class AuthService(
         return "Senha redefinida com sucesso."
     }
 
-    // --- FUNÇÃO DE CARREGAMENTO DO SPRING SECURITY (CORRIGIDA) ---
+    // --- FUNÇÃO DE CARREGAMENTO DO SPRING SECURITY (A SUA VERSÃO CORRIGIDA) ---
     @Transactional
     @Throws(ResponseStatusException::class)
     override fun loadUserByUsername(email: String): UserDetails {
@@ -108,13 +108,12 @@ class AuthService(
             .orElseThrow { ResponseStatusException(HttpStatus.UNAUTHORIZED, "Usuário não encontrado") }
 
         // CORREÇÃO: Damos ao usuário uma 'ROLE' (autoridade) básica.
-        // Sem isso, o Spring Security bloqueia o acesso (403).
         val authorities = listOf(SimpleGrantedAuthority("ROLE_USER"))
 
         return org.springframework.security.core.userdetails.User
             .withUsername(user.email)
             .password(user.password)
-            .authorities(authorities) // <-- A MUDANÇA ESTÁ AQUI
+            .authorities(authorities) // <-- A SUA MUDANÇA (CORRETA)
             .accountExpired(false)
             .accountLocked(false)
             .credentialsExpired(false)

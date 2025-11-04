@@ -1,7 +1,9 @@
 package com.vitalance.app.config
 
+// (Certifique-se que os caminhos de import estão corretos para sua estrutura de pacotes)
 import com.vitalance.app.security.JwtFilter
 import com.vitalance.app.service.AuthService
+
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.security.authentication.AuthenticationManager
@@ -20,10 +22,10 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 class SecurityConfig(
     private val jwtFilter: JwtFilter,
     private val authService: AuthService,
-    private val passwordEncoder: PasswordEncoder // Agora injetamos o PasswordEncoder
+    private val passwordEncoder: PasswordEncoder // Injetando o Encoder (do AppConfig)
 ) {
 
-    // O Bean do PasswordEncoder foi REMOVIDO daqui
+    // O Bean do PasswordEncoder NÃO ESTÁ AQUI (Está no AppConfig.kt)
 
     @Bean
     fun authenticationManager(authenticationConfiguration: AuthenticationConfiguration): AuthenticationManager {
@@ -39,17 +41,32 @@ class SecurityConfig(
         return provider
     }
 
-    // Configuração principal de segurança (atualizada)
+    // Configuração principal de segurança (MESCLADA)
     @Bean
     fun filterChain(http: HttpSecurity): SecurityFilterChain {
         http
             .csrf { it.disable() }
             .sessionManagement { session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS) }
+
+            // --- BLOCO DE AUTORIZAÇÃO MESCLADO ---
             .authorizeHttpRequests { auth ->
                 auth
-                    .requestMatchers("/api/auth/**").permitAll() // Rotas públicas
-                    .anyRequest().authenticated() // Todas as other são protegidas
+                    // Suas rotas públicas
+                    .requestMatchers("/api/auth/**").permitAll()
+
+                    // Suas rotas protegidas
+                    .requestMatchers("/api/dashboard/**").authenticated()
+                    .requestMatchers("/api/profile/**").authenticated()
+                    .requestMatchers("/api/activities/**").authenticated()
+
+                    // Rota do seu colega (corrigida para ser protegida)
+                    .requestMatchers("/api/settings/**").authenticated()
+
+                    // Regra final
+                    .anyRequest().authenticated()
             }
+            // --- FIM DO BLOCO MESCLADO ---
+
             // Define o provedor de autenticação que criamos
             .authenticationProvider(authenticationProvider())
             // Adiciona o filtro JWT

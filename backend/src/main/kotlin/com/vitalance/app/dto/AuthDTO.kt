@@ -6,6 +6,8 @@ import jakarta.validation.constraints.Pattern
 // Expressão regular para forçar complexidade de senha:
 const val PASSWORD_REGEX = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{6,}$"
 
+// --- DTOs COMUNS (Auth) ---
+
 // DTO usado para Cadastro e Login
 data class AuthRequest(
     @field:Email(message = "O e-mail deve ser válido.")
@@ -15,13 +17,25 @@ data class AuthRequest(
     val password: String
 )
 
-// NOVO DTO: Requisição inicial de reset (apenas e-mail no corpo JSON)
+// DTO para a requisição de Login (usado pelo AuthService)
+data class LoginRequestDTO(
+    val email: String,
+    val password: String
+)
+
+// DTO para a resposta de Login (VERSÃO DO SEU COLEGA - CORRETA)
+data class AuthResponseDTO(
+    val token: String,
+    val tokenType: String = "Bearer" // Padrão de mercado
+)
+
+// DTO para a requisição inicial de reset (apenas e-mail no corpo JSON)
 data class EmailRequest(
     @field:Email(message = "O e-mail deve ser válido.")
     val email: String
 )
 
-// NOVO DTO: Requisição de reset de senha (com confirmação)
+// DTO para a requisição de reset de senha (com confirmação)
 data class ResetPasswordConfirmationRequest(
     @field:Pattern(regexp = PASSWORD_REGEX, message = "A nova senha deve ter no mínimo 6 caracteres e incluir 1 letra maiúscula, 1 minúscula, 1 número e 1 símbolo (@$!%*?&).")
     val password: String,
@@ -30,11 +44,19 @@ data class ResetPasswordConfirmationRequest(
     val confirmPassword: String
 )
 
-// DTO para receber a atualização do perfil (o que o app envia)
+// --- DTOs DO SEU PERFIL (Main) ---
+
+// DTO para receber a atualização do perfil (AGORA INCLUI AS CONFIGURAÇÕES)
 data class ProfileUpdateDTO(
+    // Campos do Perfil
     val username: String?,
     val bio: String?,
-    val profilePictureUrl: String?
+    val profilePictureUrl: String?,
+
+    // Campos de Configurações (do seu colega)
+    val theme: String?,
+    val notificationsEnabled: Boolean?,
+    val goal: String?
 )
 
 // DTO para enviar os dados do perfil (o que o backend responde)
@@ -46,28 +68,11 @@ data class ProfileResponseDTO(
     val profilePictureUrl: String?
 )
 
-// --- ADICIONADO (Faltava) ---
+// --- DTOs GENÉRICOS ---
+
 // DTO de resposta (genérico)
 data class MessageResponse(
     val message: String
 )
 
-// --- ADICIONADO (Faltava) ---
-// DTO de resposta do Login (com Token)
-data class LoginResponse(
-    val token: String,
-    val userId: Long,
-    val message: String
-)
-
-// DTO para a requisição de Login (usado pelo novo AuthService)
-data class LoginRequestDTO(
-    @field:Email(message = "O e-mail deve ser válido.")
-    val email: String,
-    val password: String
-)
-
-// DTO para a resposta de Login (usado pelo novo AuthService)
-data class AuthResponseDTO(
-    val token: String
-)
+// (Seu DTO 'LoginResponse' foi removido por ser redundante com 'AuthResponseDTO')

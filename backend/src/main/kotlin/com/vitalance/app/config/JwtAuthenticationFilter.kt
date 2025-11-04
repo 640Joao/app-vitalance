@@ -1,7 +1,10 @@
-package com.vitalance.app.security
-
+// O pacote está como 'config', conforme sua instrução
+package com.vitalance.app.config
 
 import com.vitalance.app.repository.UserRepository
+// A importação do Provider (do seu colega).
+// VERIFIQUE ESTE CAMINHO! Se ele estiver em 'auth/security', mude o import.
+import com.vitalance.app.security.JwtTokenProvider
 import jakarta.servlet.FilterChain
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
@@ -13,10 +16,8 @@ import org.springframework.stereotype.Component
 import org.springframework.web.filter.OncePerRequestFilter
 import kotlin.jvm.optionals.getOrNull
 
-
 @Component
-class JwtFilter(
-    // CORREÇÃO: Removemos o caminho completo, pois ambos estão no pacote 'auth.security'
+class JwtAuthenticationFilter(
     private val jwtTokenProvider: JwtTokenProvider,
     private val userRepository: UserRepository
 ) : OncePerRequestFilter() {
@@ -38,9 +39,10 @@ class JwtFilter(
 
         jwt = header.substring(7)
 
-        // 2. Tenta extrair o E-MAIL
+        // 2. Tenta extrair o E-MAIL (CORREÇÃO DO NOME DO MÉTODO)
         userEmail = try {
-            jwtTokenProvider.extractEmail(jwt)
+            // Antes (Errado): jwtTokenProvider.getEmailFromJWT(jwt)
+            jwtTokenProvider.extractEmail(jwt) // CORRETO (Linha ~33)
         } catch (e: Exception) {
             filterChain.doFilter(request, response)
             return
@@ -49,22 +51,19 @@ class JwtFilter(
         // 3. Se o token for válido e o usuário não estiver autenticado
         if (userEmail != null && SecurityContextHolder.getContext().authentication == null) {
 
-            // 4. CORREÇÃO CRÍTICA: Buscamos a Entidade User REAL (do model)
             val userEntity = userRepository.findByEmail(userEmail).getOrNull()
 
             if (userEntity != null && jwtTokenProvider.validateToken(jwt)) {
 
-                val authorities = listOf(SimpleGrantedAuthority("ROLE_USER")) // Damos a ele a permissão
+                val authorities = listOf(SimpleGrantedAuthority("ROLE_USER"))
 
                 val authentication = UsernamePasswordAuthenticationToken(
-                    userEntity,
+                    userEntity, // Coloca o objeto User real
                     null,
                     authorities
                 )
 
                 authentication.details = WebAuthenticationDetailsSource().buildDetails(request)
-
-                // Define o usuário no contexto de segurança
                 SecurityContextHolder.getContext().authentication = authentication
             }
         }

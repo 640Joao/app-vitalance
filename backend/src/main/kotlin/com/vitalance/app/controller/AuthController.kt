@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.*
 @RequestMapping("/api/auth")
 class AuthController(
     private val authService: AuthService
-    // REMOVEMOS a injeção do JwtUtil
 ) {
 
     // Rota de Cadastro: POST /api/auth/register
@@ -40,7 +39,7 @@ class AuthController(
         return MessageResponse(message)
     }
 
-    // Rota de Login: POST /api/auth/login (ATUALIZADA)
+    // Rota de Login: POST /api/auth/login (A SUA VERSÃO)
     @PostMapping("/login")
     @ResponseStatus(HttpStatus.OK)
     fun login(@Valid @RequestBody loginRequest: LoginRequestDTO): AuthResponseDTO {

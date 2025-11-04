@@ -31,11 +31,16 @@ dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
 
 	// --- DEPENDÊNCIA DO MYSQL (PERSISTENTE) ---
-	// Você deve remover a dependência do H2 se ela estiver presente
 	runtimeOnly("com.mysql:mysql-connector-j")
 
 	// --- DEPENDÊNCIA DO E-MAIL ---
 	implementation("org.springframework.boot:spring-boot-starter-mail")
+
+	// --- DEPENDÊNCIAS DO JWT (CORRIGIDAS) ---
+	// (Removemos o bloco duplicado 0.11.5)
+	implementation("io.jsonwebtoken:jjwt-api:0.12.5")
+	runtimeOnly("io.jsonwebtoken:jjwt-impl:0.12.5")
+	runtimeOnly("io.jsonwebtoken:jjwt-jackson:0.12.5")
 
 	// --- Outras dependências padrão do Kotlin/Spring ---
 	implementation("org.jetbrains.kotlin:kotlin-reflect")
@@ -43,11 +48,6 @@ dependencies {
 
 	// Configurações de teste, etc.
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
-
-	//dependências para gerar e processar o JWT
-	implementation("io.jsonwebtoken:jjwt-api:0.12.5")
-	runtimeOnly("io.jsonwebtoken:jjwt-impl:0.12.5")
-	runtimeOnly("io.jsonwebtoken:jjwt-jackson:0.12.5")
 }
 
 kotlin {
