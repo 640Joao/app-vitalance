@@ -59,7 +59,7 @@ class SecurityConfig(
                     .requestMatchers("/api/profile/**").authenticated()
                     .requestMatchers("/api/activities/**").authenticated()
 
-                    // Rota do seu colega (corrigida para ser protegida)
+
                     .requestMatchers("/api/settings/**").authenticated()
 
                     // Regra final
