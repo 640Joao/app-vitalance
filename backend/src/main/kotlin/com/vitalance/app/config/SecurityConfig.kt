@@ -54,12 +54,17 @@ class SecurityConfig(
                     // Suas rotas públicas
                     .requestMatchers("/api/auth/**").permitAll()
 
+                    // ----- NOVAS LINHAS -----
+                    // Rotas públicas (Swagger UI e API Docs)
+                    .requestMatchers("/v3/api-docs/**").permitAll()
+                    .requestMatchers("/swagger-ui/**").permitAll()
+                    .requestMatchers("/swagger-ui.html").permitAll()
+                    // --------------------------
+
                     // Suas rotas protegidas
                     .requestMatchers("/api/dashboard/**").authenticated()
                     .requestMatchers("/api/profile/**").authenticated()
                     .requestMatchers("/api/activities/**").authenticated()
-
-
                     .requestMatchers("/api/settings/**").authenticated()
 
                     // Regra final
