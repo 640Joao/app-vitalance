@@ -1,0 +1,38 @@
+{
+  "name": "vitalance-frontend",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "@capacitor/android": "^7.4.4",
+    "@capacitor/core": "^7.4.4",
+    "@radix-ui/react-alert-dialog": "^1.1.15",
+    "@radix-ui/react-avatar": "^1.1.11",
+    "@radix-ui/react-dialog": "^1.1.15",
+    "@radix-ui/react-label": "^2.1.8",
+    "@radix-ui/react-progress": "^1.1.8",
+    "@radix-ui/react-slot": "^1.2.4",
+    "@radix-ui/react-switch": "^1.2.6",
+    "axios": "^1.13.2",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
+    "lucide-react": "^0.554.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-hook-form": "^7.55.0",
+    "recharts": "^2.15.2",
+    "sonner": "^2.0.7",
+    "tailwind-merge": "^3.4.0"
+  },
+  "devDependencies": {
+    "@capacitor/cli": "^7.4.4",
+    "@types/node": "^20.10.0",
+    "@types/react": "^19.2.6",
+    "@vitejs/plugin-react-swc": "^3.10.2",
+    "vite": "6.3.5"
+  },
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "start": "vite preview"
+  }
+}
