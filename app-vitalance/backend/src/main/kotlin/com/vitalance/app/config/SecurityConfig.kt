@@ -26,11 +26,17 @@ class SecurityConfig(
     private val passwordEncoder: PasswordEncoder
 ) {
 
+    /**
+     * AuthenticationManager para autenticação do Spring Security
+     */
     @Bean
-    fun authenticationManager(authenticationConfiguration: AuthenticationConfiguration): AuthenticationManager {
-        return authenticationConfiguration.authenticationManager
+    fun authenticationManager(authConfig: AuthenticationConfiguration): AuthenticationManager {
+        return authConfig.authenticationManager
     }
 
+    /**
+     * AuthenticationProvider usando UserDetailsService + PasswordEncoder
+     */
     @Bean
     fun authenticationProvider(): AuthenticationProvider {
         val provider = DaoAuthenticationProvider()
@@ -39,11 +45,20 @@ class SecurityConfig(
         return provider
     }
 
+    /**
+     * Configuração global de CORS
+     */
     @Bean
     fun corsConfigurationSource(): CorsConfigurationSource {
         val configuration = CorsConfiguration()
-        configuration.allowedOrigins = listOf("http://localhost:3000", "http://localhost:5173", "http://localhost:8080")
-        configuration.allowedMethods = listOf("GET", "POST", "PUT", "DELETE", "OPTIONS", "HEAD", "PATCH")
+        configuration.allowedOrigins = listOf(
+            "http://localhost:4173",
+            "http://192.168.1.64:4173",
+            "http://localhost:3000",
+            "http://localhost:5173",
+            "http://localhost:8080"
+        )
+        configuration.allowedMethods = listOf("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH")
         configuration.allowedHeaders = listOf("*")
         configuration.allowCredentials = true
 
@@ -52,34 +67,35 @@ class SecurityConfig(
         return source
     }
 
+    /**
+     * Configuração principal do Spring Security
+     */
     @Bean
     fun filterChain(http: HttpSecurity): SecurityFilterChain {
         http
             .cors { it.configurationSource(corsConfigurationSource()) }
             .csrf { it.disable() }
-            .sessionManagement { session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS) }
+            .sessionManagement { it.sessionCreationPolicy(SessionCreationPolicy.STATELESS) }
             .authorizeHttpRequests { auth ->
-                auth
-                    // --- CORREÇÃO: ADICIONAMOS A PERMISSÃO ESPECÍFICA ANTES DA GENÉRICA ---
-                    .requestMatchers("/api/auth/reset-password/**").permitAll()
 
-                    // Permissão genérica para Login/Registro e Solicitação de token
-                    .requestMatchers("/api/auth/**").permitAll()
-                    .requestMatchers("/auth/**").permitAll()
+                // 🔓 Rotas públicas
+                auth.requestMatchers("/api/auth/reset-password/**").permitAll()
+                auth.requestMatchers("/api/auth/**").permitAll()
+                auth.requestMatchers("/auth/**").permitAll()
 
-                    // Swagger e Docs
-                    .requestMatchers("/v3/api-docs/**").permitAll()
-                    .requestMatchers("/swagger-ui/**").permitAll()
-                    .requestMatchers("/swagger-ui.html").permitAll()
+                // 🔓 Swagger
+                auth.requestMatchers("/v3/api-docs/**").permitAll()
+                auth.requestMatchers("/swagger-ui/**").permitAll()
+                auth.requestMatchers("/swagger-ui.html").permitAll()
 
-                    // Rotas protegidas
-                    .requestMatchers("/api/dashboard/**").authenticated()
-                    .requestMatchers("/api/profile/**").authenticated()
-                    .requestMatchers("/api/activities/**").authenticated()
-                    .requestMatchers("/api/settings/**").authenticated()
+                // 🔐 Rotas protegidas
+                auth.requestMatchers("/api/dashboard/**").authenticated()
+                auth.requestMatchers("/api/profile/**").authenticated()
+                auth.requestMatchers("/api/activities/**").authenticated()
+                auth.requestMatchers("/api/settings/**").authenticated()
 
-                    // Qualquer outra requisição precisa de login
-                    .anyRequest().authenticated()
+                // 🔐 Qualquer outra rota exige autenticação
+                auth.anyRequest().authenticated()
             }
             .authenticationProvider(authenticationProvider())
             .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter::class.java)
