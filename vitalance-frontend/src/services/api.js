@@ -6,7 +6,7 @@ import axios from 'axios';
 const api = axios.create({
   // Use o IP da sua máquina (192.168.1.70) para poder acessar pelo celular via Wi-Fi
   // Ou use 'http://localhost:8082/api' se for testar só no PC.
-  baseURL: 'http://192.168.2.118:8082/api',
+  baseURL: 'https://vitalance-production.up.railway.app/api',
   headers: {
     'Content-Type': 'application/json',
   },
